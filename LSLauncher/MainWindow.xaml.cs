@@ -61,6 +61,7 @@ namespace LSLauncher
             {
                 v.champIndex = Player.Champions.IndexOf(v.champion);
             }
+            DataContext = this;
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
