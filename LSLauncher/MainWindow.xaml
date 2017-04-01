@@ -1,0 +1,73 @@
+﻿<Window x:Class="LSLauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LSLauncher"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        FontSize="15"
+        Title="LoL Sandbox Launcher" Height="600" Width="1000" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Window.Resources>
+        <DataTemplate x:Key="player">
+            <Border BorderThickness="1" BorderBrush="Black">
+                <StackPanel DataContext="{Binding}" Orientation="Horizontal">
+                    <TextBox Margin="3" Text="{Binding name, Mode=TwoWay}" Width="100" />
+                    <TextBlock Margin="3" Text="Team:" />
+                    <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding teamIndex, Mode=OneWay}" SelectionChanged="Team_SelectionChanged" >
+                        <ComboBoxItem Content="BLUE" />
+                        <ComboBoxItem Content="PURPLE" />
+                    </ComboBox>
+                    <!--<TextBlock Margin="3" Text="{Binding rank}" />-->
+                    <ComboBox Tag="{Binding}" SelectedIndex="{Binding champIndex}" SelectionChanged="Champion_SelectionChanged" Margin="3" Width="200" ItemsSource="{Binding Champions}" />
+                    <!--<TextBlock Margin="3" Text="{Binding skin}" />-->
+                    <!--<TextBlock Margin="3" Text="{Binding summoner1}" />
+                    <TextBlock Margin="3" Text="{Binding summoner2}" />-->
+                    <!--<TextBlock Margin="3" Text="{Binding ribbon}" />
+                    <TextBlock Margin="3" Text="{Binding icon}" />-->
+                    <Button Margin="3" Tag="{Binding}" Content="Remove" Click="RemovePlayer_Click" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Visibility="{Binding SelectServerPath, FallbackValue=Collapsed}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Please select the server path!" />
+            <Button Content="Select path" Click="SelectServerPath_Click" />
+        </StackPanel>
+        <StackPanel Visibility="{Binding SelectClientPath, FallbackValue=Collapsed}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Please select the client path!" />
+            <Button Content="Select path" Click="SelectClientPath_Click" />
+        </StackPanel>
+        <StackPanel Visibility="{Binding Launcher, FallbackValue=Collapsed}" Margin="3">
+            <StackPanel Margin="3" DataContext="{Binding Config}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Server path: " />
+                    <TextBox Margin="3" HorizontalAlignment="Left" Text="{Binding ServerPath, Mode=TwoWay}" Width="800" />
+                    <Button Margin="3" Content="..." Click="SelectServerPath_Click" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Client path: " />
+                    <TextBox Margin="3" HorizontalAlignment="Left" Text="{Binding ClientPath, Mode=TwoWay}" Width="800" />
+                    <Button Margin="3" Content="..." Click="SelectClientPath_Click" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DataContext="{Binding GameData}">
+                <StackPanel Margin="3" DataContext="{Binding gameInfo}">
+                    <CheckBox Margin="3" IsChecked="{Binding IsManacosts, Mode=TwoWay}" Content="Mana costs" />
+                    <CheckBox Margin="3" IsChecked="{Binding IsCooldowns, Mode=TwoWay}" Content="Cooldowns" />
+                    <CheckBox Margin="3" IsChecked="{Binding IsCheats, Mode=TwoWay}" Content="Cheats" />
+                    <CheckBox Margin="3" IsChecked="{Binding IsMinionSpawns, Mode=TwoWay}" Content="Minion spawns" />
+                </StackPanel>
+                <StackPanel Margin="3" DataContext="{Binding game}" Orientation="Horizontal">
+                    <TextBlock Margin="3" Text="Pálya:" />
+                    <ComboBox SelectedIndex="{Binding MapIndex}" SelectionChanged="Map_SelectionChanged" Margin="3" VerticalAlignment="Top" Width="200" ItemsSource="{Binding Maps}" DisplayMemberPath="Name" />
+                </StackPanel>
+                <ItemsControl Margin="3" ItemsSource="{Binding players}" ItemTemplate="{StaticResource player}" />
+                <Button Margin="3" Content="New player" VerticalAlignment="Top" Click="AddPlayer_Click" />
+            </StackPanel>
+            <Button Margin="3" HorizontalAlignment="Left" Content="Start server and client" Click="Start_Click" />
+            <Button Margin="3" HorizontalAlignment="Left" Content="Start only client" Click="StartOnlyClient_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
