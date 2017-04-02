@@ -14,17 +14,16 @@
                 <StackPanel DataContext="{Binding}" Orientation="Horizontal">
                     <TextBox Margin="3" Text="{Binding name, Mode=TwoWay}" Width="100" />
                     <TextBlock Margin="3" Text="Team:" />
-                    <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding teamIndex, Mode=OneWay}" SelectionChanged="Team_SelectionChanged" >
-                        <ComboBoxItem Content="BLUE" />
-                        <ComboBoxItem Content="PURPLE" />
-                    </ComboBox>
+                    <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding teamIndex, Mode=OneWay}" ItemsSource="{Binding Teams}" SelectionChanged="Team_SelectionChanged" />
                     <!--<TextBlock Margin="3" Text="{Binding rank}" />-->
+                    <TextBlock Margin="3" Text="Champion:" />
                     <ComboBox Tag="{Binding}" SelectedIndex="{Binding champIndex}" SelectionChanged="Champion_SelectionChanged" Margin="3" Width="200" ItemsSource="{Binding Champions}" />
                     <!--<TextBlock Margin="3" Text="{Binding skin}" />-->
                     <!--<TextBlock Margin="3" Text="{Binding summoner1}" />
                     <TextBlock Margin="3" Text="{Binding summoner2}" />-->
-                    <!--<TextBlock Margin="3" Text="{Binding ribbon}" />
-                    <TextBlock Margin="3" Text="{Binding icon}" />-->
+                    <TextBlock Margin="3" Text="Ribbon:" />
+                    <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding ribbonIndex, Mode=OneWay}" ItemsSource="{Binding Ribbons}" DisplayMemberPath="Name" SelectionChanged="Ribbon_SelectionChanged" />
+                    <!--<TextBlock Margin="3" Text="{Binding icon}" />-->
                     <Button Margin="3" Tag="{Binding}" Content="Remove" Click="RemovePlayer_Click" />
                 </StackPanel>
             </Border>
@@ -63,9 +62,9 @@
                     <TextBlock Margin="3" Text="Pálya:" />
                     <ComboBox SelectedIndex="{Binding MapIndex}" SelectionChanged="Map_SelectionChanged" Margin="3" VerticalAlignment="Top" Width="200" ItemsSource="{Binding Maps}" DisplayMemberPath="Name" />
                 </StackPanel>
-                <ItemsControl Margin="3" ItemsSource="{Binding players}" ItemTemplate="{StaticResource player}" />
-                <Button Margin="3" Content="New player" VerticalAlignment="Top" Click="AddPlayer_Click" />
             </StackPanel>
+            <Button Margin="3" HorizontalAlignment="Left"  Content="New player" VerticalAlignment="Top" Click="AddPlayer_Click" />
+            <ItemsControl Margin="3" ItemsSource="{Binding GameData.players}" ItemTemplate="{StaticResource player}" />
             <Button Margin="3" HorizontalAlignment="Left" Content="Start server and client" Click="Start_Click" />
             <Button Margin="3" HorizontalAlignment="Left" Content="Start only client" Click="StartOnlyClient_Click" />
         </StackPanel>

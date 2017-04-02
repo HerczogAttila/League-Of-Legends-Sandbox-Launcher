@@ -1,15 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 
 namespace LSLauncher
 {
-    public enum Team { BLUE, PURPLE }
-    public enum Rank { BRONZE, SILVER, GOLD, PLATINA, DIAMOND, CHALLENGER }
-
-    public class Player
+    public class Player : INotifyPropertyChanged
     {
-        public static string[] Teams = new string[] { "BLUE", "PURPLE" };
+        public static Collection<Map> Ribbons { get; set; } = new Collection<Map>(new Map[] {
+            new Map() { Id = 0, Name = "None" },
+            new Map() { Id = 1, Name = "Yellow" },
+            new Map() { Id = 2, Name = "Blue" },
+            new Map() { Id = 4, Name = "Green" },
+            new Map() { Id = 8, Name = "Red" }
+        });
+        public static string[] Teams { get; set; } = new string[] { "BLUE", "PURPLE" };
         public static string[] Ranks = new string[] { "BRONZE", "SILVER", "GOLD", "PLATINA", "DIAMOND", "CHALLENGER" };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void Changed(string property)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
         public static Collection<string> Champions { get; private set; } = new Collection<string>();
 
         public string team { get; set; }
@@ -26,15 +39,17 @@ namespace LSLauncher
 
         public Dictionary<int, int> runes { get; private set; }
 
-        public int teamIndex => (team.Equals("BLUE")) ? 0 : 1;
+        public string oppositeTeam => (team.Equals(Teams[0])) ? Teams[1] : Teams[0];
+        public int teamIndex => (team.Equals(Teams[0])) ? 0 : 1;
+        public int ribbonIndex => Ribbons.IndexOf(Ribbons.FirstOrDefault(s => s.Id == ribbon));
         public int champIndex { get; set; }
 
         public Player()
         {
             team = Teams[0];
             rank = Ranks[0];
-            name = "test";
-            champion = "Ezreal";
+            name = "";
+            champion = "Aatrox";
             skin = 0;
 
             summoner1 = "SummonerHeal";

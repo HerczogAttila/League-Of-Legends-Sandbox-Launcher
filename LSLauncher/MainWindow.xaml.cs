@@ -101,7 +101,11 @@ namespace LSLauncher
             if (GameData.players.Count >= 10)
                 return;
 
-            GameData.players.Add(new Player() { name = "Player " + (GameData.players.Count + 1) });
+            var team = Player.Teams[0];
+            if (GameData.players.Count(s => s.team == team) == 5)
+                team = Player.Teams[1];
+
+            GameData.players.Add(new Player() { name = "Player " + (GameData.players.Count + 1), team = team });
         }
         private void RemovePlayer_Click(object sender, RoutedEventArgs e)
         {
@@ -113,6 +117,24 @@ namespace LSLauncher
             var box = (sender as ComboBox);
             var player = box.Tag as Player;
             player.team = Player.Teams[box.SelectedIndex];
+            if (GameData.players.Count(s => s.team == player.team) > 5)
+            {
+                var p = GameData.players.FirstOrDefault(s => s.team.Equals(player.team) && !s.Equals(player));
+                if (p != null)
+                {
+                    p.team = p.oppositeTeam;
+                    p.Changed("teamIndex");
+                }
+            }
+
+            GameData.Save(Config.GameInfoPath);
+        }
+        private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            player.ribbon = Player.Ribbons[box.SelectedIndex].Id;
+            GameData.Save(Config.GameInfoPath);
         }
         private void Champion_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
