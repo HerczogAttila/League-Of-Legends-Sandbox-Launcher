@@ -21,12 +21,15 @@ namespace LSLauncher
         public int Index { get; set; }
 
         [JsonIgnore]
-        public string GameInfoPath => ServerPath + @"\\settings\GameInfo.json";
+        public string GameInfoPath => ServerPath + @"\settings\GameInfo.json";
         [JsonIgnore]
-        public string ChampionsPath => ServerPath + @"\\Content\Data\LeagueSandbox-Default\Champions";
+        public string ChampionsPath => ServerPath + @"\Content\Data\LeagueSandbox-Default\Champions";
+        [JsonIgnore]
+        public string SummonerSpellsPath => ServerPath + @"\Content\Data\LeagueSandbox-Default\Champions\Global\";
 
         [JsonIgnore]
-        public bool IsValidServerPath => File.Exists(ServerPath + "\\" + ServerExe) && File.Exists(GameInfoPath) && Directory.Exists(ChampionsPath);
+        public bool IsValidServerPath => File.Exists(ServerPath + "\\" + ServerExe) && File.Exists(GameInfoPath) && Directory.Exists(ChampionsPath) &&
+            Directory.Exists(SummonerSpellsPath);
         [JsonIgnore]
         public bool IsValidClientPath => File.Exists(ClientPath + ClientExtern + ClientExe);
 

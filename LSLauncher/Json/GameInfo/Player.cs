@@ -17,22 +17,22 @@ namespace LSLauncher
         public static string[] Teams { get; set; } = new string[] { "BLUE", "PURPLE" };
         public static string[] Ranks = new string[] { "BRONZE", "SILVER", "GOLD", "PLATINA", "DIAMOND", "CHALLENGER" };
 
+        public static Collection<string> Champions { get; private set; } = new Collection<string>();
+        public static Collection<string> SummonerSpells { get; private set; } = new Collection<string>();
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void Changed(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
-        public static Collection<string> Champions { get; private set; } = new Collection<string>();
-
         public string team { get; set; }
         public string rank { get; set; }
         public string name { get; set; }
-        public string champion { get; set; }
-        public int skin { get; set; }
-        
         public string summoner1 { get; set; }
         public string summoner2 { get; set; }
+        public string champion { get; set; }
+        public int skin { get; set; }
 
         public int ribbon { get; set; }
         public int icon { get; set; }
@@ -42,6 +42,8 @@ namespace LSLauncher
         public string oppositeTeam => (team.Equals(Teams[0])) ? Teams[1] : Teams[0];
         public int teamIndex => (team.Equals(Teams[0])) ? 0 : 1;
         public int ribbonIndex => Ribbons.IndexOf(Ribbons.FirstOrDefault(s => s.Id == ribbon));
+        public int summoner1Index => SummonerSpells.IndexOf(summoner1);
+        public int summoner2Index => SummonerSpells.IndexOf(summoner2);
         public int champIndex { get; set; }
 
         public Player()

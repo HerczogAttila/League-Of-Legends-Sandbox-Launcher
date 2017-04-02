@@ -45,22 +45,39 @@ namespace LSLauncher
 
         private void LoadGameData()
         {
+            //load gameData
             GameData = GameData.Load(Config.GameInfoPath);
             if (GameData == null)
             {
                 GameData = new GameData();
                 GameData.Save(Config.GameInfoPath);
             }
+            GameData.game.MapIndex = Game.Maps.IndexOf(Game.Maps.FirstOrDefault(s => s.Id == GameData.game.map));
+
+            //load champs
             var champs = Directory.GetDirectories(Config.ChampionsPath);
             Player.Champions.Clear();
             foreach (var v in champs)
                 Player.Champions.Add(v.Substring(v.LastIndexOf("\\") + 1));
 
-            GameData.game.MapIndex = Game.Maps.IndexOf(Game.Maps.FirstOrDefault(s => s.Id == GameData.game.map));
+            
             foreach (var v in GameData.players)
             {
                 v.champIndex = Player.Champions.IndexOf(v.champion);
             }
+
+            //load summoner spells
+            var summonerSpells = Directory.GetFiles(Config.SummonerSpellsPath);
+            Player.SummonerSpells.Clear();
+            string ss;
+            foreach (var v in summonerSpells)
+            {
+                ss = v.Substring(v.LastIndexOf("\\") + 1).Replace(".cs", "");
+                if(!ss.Equals("Recall"))
+                    Player.SummonerSpells.Add(ss);
+            }
+                
+
             DataContext = this;
         }
 
@@ -89,58 +106,6 @@ namespace LSLauncher
                 LoadGameData();
 
             DataContext = this;
-        }
-
-        private void Map_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            GameData.game.map = Game.Maps.ElementAt(GameData.game.MapIndex).Id;
-        }
-
-        private void AddPlayer_Click(object sender, RoutedEventArgs e)
-        {
-            if (GameData.players.Count >= 10)
-                return;
-
-            var team = Player.Teams[0];
-            if (GameData.players.Count(s => s.team == team) == 5)
-                team = Player.Teams[1];
-
-            GameData.players.Add(new Player() { name = "Player " + (GameData.players.Count + 1), team = team });
-        }
-        private void RemovePlayer_Click(object sender, RoutedEventArgs e)
-        {
-            GameData.players.Remove((sender as Button).Tag as Player);
-        }
-
-        private void Team_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var box = (sender as ComboBox);
-            var player = box.Tag as Player;
-            player.team = Player.Teams[box.SelectedIndex];
-            if (GameData.players.Count(s => s.team == player.team) > 5)
-            {
-                var p = GameData.players.FirstOrDefault(s => s.team.Equals(player.team) && !s.Equals(player));
-                if (p != null)
-                {
-                    p.team = p.oppositeTeam;
-                    p.Changed("teamIndex");
-                }
-            }
-
-            GameData.Save(Config.GameInfoPath);
-        }
-        private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var box = (sender as ComboBox);
-            var player = box.Tag as Player;
-            player.ribbon = Player.Ribbons[box.SelectedIndex].Id;
-            GameData.Save(Config.GameInfoPath);
-        }
-        private void Champion_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var box = (sender as ComboBox);
-            var player = box.Tag as Player;
-            player.champion = Player.Champions[box.SelectedIndex];
         }
 
         private void SelectServerPath_Click(object sender, RoutedEventArgs e)
@@ -183,6 +148,94 @@ namespace LSLauncher
                         Changed();
                     }
                 }
+            }
+        }
+
+        private void Map_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GameData.game.map = Game.Maps.ElementAt(GameData.game.MapIndex).Id;
+        }
+
+        private void AddPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            if (GameData.players.Count >= 10)
+                return;
+
+            var team = Player.Teams[0];
+            if (GameData.players.Count(s => s.team == team) == 5)
+                team = Player.Teams[1];
+
+            GameData.players.Add(new Player() { name = "Player " + (GameData.players.Count + 1), team = team });
+        }
+        private void RemovePlayer_Click(object sender, RoutedEventArgs e)
+        {
+            GameData.players.Remove((sender as Button).Tag as Player);
+        }
+
+        private void Team_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            if (box.SelectedIndex == -1)
+                return;
+
+            player.team = Player.Teams[box.SelectedIndex];
+            if (GameData.players.Count(s => s.team == player.team) > 5)
+            {
+                var p = GameData.players.FirstOrDefault(s => s.team.Equals(player.team) && !s.Equals(player));
+                if (p != null)
+                {
+                    p.team = p.oppositeTeam;
+                    p.Changed("teamIndex");
+                }
+            }
+
+            GameData.Save(Config.GameInfoPath);
+        }
+        private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            player.ribbon = Player.Ribbons[box.SelectedIndex].Id;
+            GameData.Save(Config.GameInfoPath);
+        }
+        private void Champion_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            if (box.SelectedIndex == -1)
+                return;
+
+            player.champion = Player.Champions[box.SelectedIndex];
+        }
+        private void Summoner1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            if (box.SelectedIndex == -1)
+                return;
+
+            var old = player.summoner1;
+            player.summoner1 = Player.SummonerSpells[box.SelectedIndex];
+            if (player.summoner1.Equals(player.summoner2))
+            {
+                player.summoner2 = old;
+                player.Changed("summoner2Index");
+            }
+        }
+        private void Summoner2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            if (box.SelectedIndex == -1)
+                return;
+
+            var old = player.summoner2;
+            player.summoner2 = Player.SummonerSpells[box.SelectedIndex];
+            if (player.summoner2.Equals(player.summoner1))
+            {
+                player.summoner1 = old;
+                player.Changed("summoner2Index");
             }
         }
     }
