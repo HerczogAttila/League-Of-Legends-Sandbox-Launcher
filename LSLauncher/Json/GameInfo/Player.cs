@@ -15,7 +15,7 @@ namespace LSLauncher
             new Map() { Id = 8, Name = "Red" }
         });
         public static string[] Teams { get; set; } = new string[] { "BLUE", "PURPLE" };
-        public static string[] Ranks = new string[] { "BRONZE", "SILVER", "GOLD", "PLATINA", "DIAMOND", "CHALLENGER" };
+        public static Collection<string> Ranks { get; private set; } = new Collection<string>(new string[] { "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "CHALLENGER" });
 
         public static Collection<string> Champions { get; private set; } = new Collection<string>();
         public static Collection<string> SummonerSpells { get; private set; } = new Collection<string>();
@@ -42,6 +42,7 @@ namespace LSLauncher
         public string oppositeTeam => (team.Equals(Teams[0])) ? Teams[1] : Teams[0];
         public int teamIndex => (team.Equals(Teams[0])) ? 0 : 1;
         public int ribbonIndex => Ribbons.IndexOf(Ribbons.FirstOrDefault(s => s.Id == ribbon));
+        public int rankIndex => Ranks.IndexOf(rank);
         public int summoner1Index => SummonerSpells.IndexOf(summoner1);
         public int summoner2Index => SummonerSpells.IndexOf(summoner2);
         public int champIndex { get; set; }

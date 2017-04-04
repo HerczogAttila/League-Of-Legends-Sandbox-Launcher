@@ -80,6 +80,10 @@ namespace LSLauncher
 
             DataContext = this;
         }
+        private void SaveGameData()
+        {
+            GameData.Save(Config.GameInfoPath);
+        }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
@@ -154,6 +158,7 @@ namespace LSLauncher
         private void Map_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GameData.game.map = Game.Maps.ElementAt(GameData.game.MapIndex).Id;
+            SaveGameData();
         }
 
         private void AddPlayer_Click(object sender, RoutedEventArgs e)
@@ -166,10 +171,12 @@ namespace LSLauncher
                 team = Player.Teams[1];
 
             GameData.players.Add(new Player() { name = "Player " + (GameData.players.Count + 1), team = team });
+            SaveGameData();
         }
         private void RemovePlayer_Click(object sender, RoutedEventArgs e)
         {
             GameData.players.Remove((sender as Button).Tag as Player);
+            SaveGameData();
         }
 
         private void Team_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -207,6 +214,7 @@ namespace LSLauncher
                 return;
 
             player.champion = Player.Champions[box.SelectedIndex];
+            SaveGameData();
         }
         private void Summoner1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -222,6 +230,7 @@ namespace LSLauncher
                 player.summoner2 = old;
                 player.Changed("summoner2Index");
             }
+            SaveGameData();
         }
         private void Summoner2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -237,6 +246,17 @@ namespace LSLauncher
                 player.summoner1 = old;
                 player.Changed("summoner2Index");
             }
+            SaveGameData();
+        }
+        private void Rank_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            if (box.SelectedIndex == -1)
+                return;
+
+            player.rank = Player.Ranks.ElementAt(box.SelectedIndex);
+            SaveGameData();
         }
     }
 }

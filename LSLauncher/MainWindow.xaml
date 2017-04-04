@@ -22,8 +22,8 @@
                     <!--<TextBlock Margin="3" Text="{Binding skin}" />-->
                     <ComboBox Tag="{Binding}" SelectedIndex="{Binding summoner1Index, Mode=OneWay}" SelectionChanged="Summoner1_SelectionChanged" Margin="3" ItemsSource="{Binding SummonerSpells}" />
                     <ComboBox Tag="{Binding}" SelectedIndex="{Binding summoner2Index, Mode=OneWay}" SelectionChanged="Summoner2_SelectionChanged" Margin="3" ItemsSource="{Binding SummonerSpells}" />
-                    <!--<TextBlock Margin="3" Text="{Binding summoner1}" />
-                    <TextBlock Margin="3" Text="{Binding summoner2}" />-->
+                    <TextBlock Margin="3" Text="Rank:" />
+                    <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding rankIndex, Mode=OneWay}" ItemsSource="{Binding Ranks}" SelectionChanged="Rank_SelectionChanged" />
                     <TextBlock Margin="3" Text="Ribbon:" />
                     <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding ribbonIndex, Mode=OneWay}" ItemsSource="{Binding Ribbons}" DisplayMemberPath="Name" SelectionChanged="Ribbon_SelectionChanged" />
                     <!--<TextBlock Margin="3" Text="{Binding icon}" />-->
