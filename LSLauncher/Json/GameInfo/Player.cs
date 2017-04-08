@@ -38,6 +38,7 @@ namespace LSLauncher
         public int icon { get; set; }
 
         public Dictionary<int, int> runes { get; private set; }
+        public bool? Chechked { get; set; }
 
         public string oppositeTeam => (team.Equals(Teams[0])) ? Teams[1] : Teams[0];
         public int teamIndex => (team.Equals(Teams[0])) ? 0 : 1;
@@ -72,6 +73,8 @@ namespace LSLauncher
 
             for (int i = 28; i <= 30; i++)
                 runes.Add(i, 5335);
+
+            Chechked = false;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Linq;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Text;
 
 namespace LSLauncher
 {
@@ -85,16 +86,61 @@ namespace LSLauncher
             GameData.Save(Config.GameInfoPath);
         }
 
+        private void CreateStartBatFile(string path, bool server)
+        {
+            File.WriteAllText(path, CreateStartCommand(server));
+        }
+
+        private string CreateStartCommand(bool server)
+        {
+            var sb = new StringBuilder();
+            //start server
+            if (server)
+            {
+                sb.Append("cd ");
+                sb.AppendLine(Config.ServerPath);
+                sb.Append("start ");
+                sb.AppendLine(Config.ServerExe);
+            }
+
+            sb.Append("cd ");
+            sb.Append(Config.ClientPath);
+
+            //start client
+            var i = 1;
+            foreach (var v in GameData.players)
+            {
+                if(v.Chechked == true)
+                {
+                    sb.AppendLine(Config.ClientExtern);
+                    sb.Append("start \"\" \"");
+                    sb.Append(Config.ClientExe);
+                    sb.Append("\" \"8394\" \"LoLLauncher.exe\" \"\" \"");
+                    sb.Append(Config.Server);
+                    sb.Append(" ");
+                    sb.Append(Config.Port);
+                    sb.Append(" ");
+                    sb.Append(Config.Key);
+                    sb.Append(" ");
+                    sb.Append(i);
+                    sb.AppendLine(" \"");
+                }
+                i++;
+            }
+
+            return sb.ToString();
+        }
+
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             GameData.Save(Config.GameInfoPath);
-            Config.CreateStartBatFile(startBatPath, true);
+            CreateStartBatFile(startBatPath, true);
             Process.Start(startBatPath);
         }
         private void StartOnlyClient_Click(object sender, RoutedEventArgs e)
         {
             GameData.Save(Config.GameInfoPath);
-            Config.CreateStartBatFile(startBatPath, false);
+            CreateStartBatFile(startBatPath, false);
             Process.Start(startBatPath);
         }
 
@@ -125,7 +171,6 @@ namespace LSLauncher
                     Config.ServerPath = fbd.SelectedPath;
                     if (Config.IsValidServerPath)
                     {
-                        Config.CreateStartBatFile(startBatPath);
                         Config.Changed("ServerPath");
                         Config.Save(configPath);
                         Changed();
@@ -146,7 +191,6 @@ namespace LSLauncher
                     Config.ClientPath = fbd.SelectedPath;
                     if (Config.IsValidClientPath)
                     {
-                        Config.CreateStartBatFile(startBatPath);
                         Config.Changed("ClientPath");
                         Config.Save(configPath);
                         Changed();
