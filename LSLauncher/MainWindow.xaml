@@ -17,10 +17,10 @@
                     <TextBox Margin="3" Text="{Binding name, Mode=TwoWay}" Width="100" />
                     <TextBlock Margin="3" Text="Team:" />
                     <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding teamIndex, Mode=OneWay}" ItemsSource="{Binding Teams}" SelectionChanged="Team_SelectionChanged" />
-                    <!--<TextBlock Margin="3" Text="{Binding rank}" />-->
                     <TextBlock Margin="3" Text="Champion:" />
                     <ComboBox Tag="{Binding}" SelectedIndex="{Binding champIndex}" SelectionChanged="Champion_SelectionChanged" Margin="3" ItemsSource="{Binding Champions}" />
-                    <!--<TextBlock Margin="3" Text="{Binding skin}" />-->
+                    <TextBlock Margin="3" Text="Skin:" />
+                    <ComboBox Tag="{Binding}" SelectedIndex="{Binding skin}" SelectionChanged="Skin_SelectionChanged" Margin="3" ItemsSource="{Binding Skins}" DisplayMemberPath="Name" />
                     <ComboBox Tag="{Binding}" SelectedIndex="{Binding summoner1Index, Mode=OneWay}" SelectionChanged="Summoner1_SelectionChanged" Margin="3" ItemsSource="{Binding SummonerSpells}" />
                     <ComboBox Tag="{Binding}" SelectedIndex="{Binding summoner2Index, Mode=OneWay}" SelectionChanged="Summoner2_SelectionChanged" Margin="3" ItemsSource="{Binding SummonerSpells}" />
                     <TextBlock Margin="3" Text="Rank:" />

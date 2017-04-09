@@ -258,6 +258,16 @@ namespace LSLauncher
                 return;
 
             player.champion = Player.Champions[box.SelectedIndex];
+            player.skin = 0;
+            player.Skins.Clear();
+            Skins skins;
+            if (SkinManager.Skins.TryGetValue(player.champion, out skins))
+                foreach (var v in skins.Get)
+                    player.Skins.Add(v);
+            else
+                player.Skins.Add(new Skin() { Index = 0, Name = "Default" });
+            player.Changed("skin");
+
             SaveGameData();
         }
         private void Summoner1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -300,6 +310,20 @@ namespace LSLauncher
                 return;
 
             player.rank = Player.Ranks.ElementAt(box.SelectedIndex);
+            SaveGameData();
+        }
+        private void Skin_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var player = box.Tag as Player;
+            if (box.SelectedIndex == -1)
+            {
+                player.skin = 0;
+                player.Changed("skin");
+                return;
+            }
+
+            player.skin = box.SelectedIndex;
             SaveGameData();
         }
     }

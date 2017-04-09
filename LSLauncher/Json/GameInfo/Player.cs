@@ -47,6 +47,7 @@ namespace LSLauncher
         public int summoner1Index => SummonerSpells.IndexOf(summoner1);
         public int summoner2Index => SummonerSpells.IndexOf(summoner2);
         public int champIndex { get; set; }
+        public ObservableCollection<Skin> Skins { get; private set; } = new ObservableCollection<Skin>();
 
         public Player()
         {
