@@ -9,10 +9,18 @@
         FontSize="15"
         Title="LoL Sandbox Launcher" Height="600" Width="1000" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.Resources>
+        <DataTemplate x:Key="profileIcon">
+            <Image DataContext="{Binding}" Width="48" Height="48">
+                <Image.Source>
+                    <CroppedBitmap Source="{Binding Path}" SourceRect="{Binding Rect}" />
+                </Image.Source>
+            </Image>
+        </DataTemplate>
         <DataTemplate x:Key="player">
             <Border BorderThickness="1" BorderBrush="Black">
                 <StackPanel DataContext="{Binding}" Orientation="Horizontal">
-                    <CheckBox Margin="3" IsChecked="{Binding Chechked}" Content="Active" />
+                    <!--<CheckBox Margin="3" IsChecked="{Binding Chechked}" Content="Active" />-->
+                    <Button Margin="3" Tag="{Binding}" Content="Play" Click="Play_Click" />
                     <TextBlock Margin="3" Text="Name:" />
                     <TextBox Margin="3" Text="{Binding name, Mode=TwoWay}" Width="100" />
                     <TextBlock Margin="3" Text="Team:" />
@@ -27,6 +35,7 @@
                     <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding rankIndex, Mode=OneWay}" ItemsSource="{Binding Ranks}" SelectionChanged="Rank_SelectionChanged" />
                     <TextBlock Margin="3" Text="Ribbon:" />
                     <ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding ribbonIndex, Mode=OneWay}" ItemsSource="{Binding Ribbons}" DisplayMemberPath="Name" SelectionChanged="Ribbon_SelectionChanged" />
+                    <!--<ComboBox Margin="3" Tag="{Binding}" SelectedIndex="{Binding icon}" ItemsSource="{Binding ProfileIcons}" ItemTemplate="{StaticResource profileIcon}" />-->
                     <!--<TextBlock Margin="3" Text="{Binding icon}" />-->
                     <Button Margin="3" Tag="{Binding}" Content="Remove" Click="RemovePlayer_Click" />
                 </StackPanel>
@@ -67,10 +76,10 @@
                     <ComboBox SelectedIndex="{Binding MapIndex}" SelectionChanged="Map_SelectionChanged" Margin="3" VerticalAlignment="Top" Width="200" ItemsSource="{Binding Maps}" DisplayMemberPath="Name" />
                 </StackPanel>
             </StackPanel>
+            <Button Margin="3" HorizontalAlignment="Left" Content="Start server" Click="StartServer_Click" />
             <Button Margin="3" HorizontalAlignment="Left"  Content="New player" VerticalAlignment="Top" Click="AddPlayer_Click" />
             <ItemsControl Margin="3" ItemsSource="{Binding GameData.players}" ItemTemplate="{StaticResource player}" />
-            <Button Margin="3" HorizontalAlignment="Left" Content="Start server and client" Click="Start_Click" />
-            <Button Margin="3" HorizontalAlignment="Left" Content="Start only client" Click="StartOnlyClient_Click" />
+            <!--<Button Margin="3" HorizontalAlignment="Left" Content="Start only client" Click="StartOnlyClient_Click" />-->
         </StackPanel>
     </Grid>
 </Window>

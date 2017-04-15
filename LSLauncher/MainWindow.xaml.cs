@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Text;
+using System.Collections.ObjectModel;
 
 namespace LSLauncher
 {
@@ -90,6 +91,34 @@ namespace LSLauncher
         {
             File.WriteAllText(path, CreateStartCommand(server));
         }
+        private void CreateStartServerBatFile()
+        {
+            var sb = new StringBuilder();
+            sb.Append("cd ");
+            sb.AppendLine(Config.ServerPath);
+            sb.Append("start ");
+            sb.AppendLine(Config.ServerExe);
+            File.WriteAllText(startBatPath, sb.ToString());
+        }
+        private void CreateStartClientBatFile(int index)
+        {
+            var sb = new StringBuilder();
+            sb.Append("cd ");
+            sb.Append(Config.ClientPath);
+            sb.AppendLine(Config.ClientExtern);
+            sb.Append("start \"\" \"");
+            sb.Append(Config.ClientExe);
+            sb.Append("\" \"8394\" \"LoLLauncher.exe\" \"\" \"");
+            sb.Append(Config.Server);
+            sb.Append(" ");
+            sb.Append(Config.Port);
+            sb.Append(" ");
+            sb.Append(Config.Key);
+            sb.Append(" ");
+            sb.Append(index);
+            sb.AppendLine("\"");
+            File.WriteAllText(startBatPath, sb.ToString());
+        }
 
         private string CreateStartCommand(bool server)
         {
@@ -131,10 +160,10 @@ namespace LSLauncher
             return sb.ToString();
         }
 
-        private void Start_Click(object sender, RoutedEventArgs e)
+        private void StartServer_Click(object sender, RoutedEventArgs e)
         {
             GameData.Save(Config.GameInfoPath);
-            CreateStartBatFile(startBatPath, true);
+            CreateStartServerBatFile();
             Process.Start(startBatPath);
         }
         private void StartOnlyClient_Click(object sender, RoutedEventArgs e)
@@ -154,6 +183,11 @@ namespace LSLauncher
                 Config = new Config();
             else if (Config.IsValidServerPath)
                 LoadGameData();
+
+            //for (var i = 0; i < 290; i++)
+            //    Player.ProfileIcons.Add(new ProfileIcon(i));
+
+            Player.ProfileIcons.Add(new ProfileIcon(0));
 
             DataContext = this;
         }
@@ -325,6 +359,15 @@ namespace LSLauncher
 
             player.skin = box.SelectedIndex;
             SaveGameData();
+        }
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (sender as Button);
+            var player = btn.Tag as Player;
+
+            var index = GameData.players.IndexOf(player) + 1;
+            CreateStartClientBatFile(index);
+            Process.Start(startBatPath);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace LSLauncher
 
         public static Collection<string> Champions { get; private set; } = new Collection<string>();
         public static Collection<string> SummonerSpells { get; private set; } = new Collection<string>();
+        public static ObservableCollection<ProfileIcon> ProfileIcons { get; private set; } = new ObservableCollection<ProfileIcon>();
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void Changed(string property)
