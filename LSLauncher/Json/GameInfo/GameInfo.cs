@@ -12,6 +12,8 @@ namespace LSLauncher
         public bool? IsCheats { get; set; }
         [JsonProperty("MINION_SPAWNS_ENABLED")]
         public bool? IsMinionSpawns { get; set; }
+        [JsonProperty("IS_WAIT_PLAYERS")]
+        public bool? IsWaitPlayers { get; set; }
 
         public GameInfo()
         {
@@ -19,6 +21,7 @@ namespace LSLauncher
             IsCooldowns = true;
             IsCheats = false;
             IsMinionSpawns = true;
+            IsWaitPlayers = false;
         }
     }
 }

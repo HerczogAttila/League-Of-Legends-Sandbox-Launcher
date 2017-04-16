@@ -66,6 +66,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" DataContext="{Binding GameData}">
                 <StackPanel Margin="3" DataContext="{Binding gameInfo}">
+                    <CheckBox Margin="3" IsChecked="{Binding IsWaitPlayers, Mode=TwoWay}" Content="Wait players" />
                     <CheckBox Margin="3" IsChecked="{Binding IsManacosts, Mode=TwoWay}" Content="Mana costs" />
                     <CheckBox Margin="3" IsChecked="{Binding IsCooldowns, Mode=TwoWay}" Content="Cooldowns" />
                     <CheckBox Margin="3" IsChecked="{Binding IsCheats, Mode=TwoWay}" Content="Cheats" />
